@@ -12,8 +12,6 @@
 
 -define(APP, example_openapi).
 
-
-
 start(_StartType, _StartArgs) ->
     {ok, _} = application:ensure_all_started(minirest),
     Authorization = {?MODULE, authorize_appid},
@@ -30,7 +28,9 @@ start(_StartType, _StartArgs) ->
                     type => apiKey,
                     name => "authorization",
                     in => header}}}},
+    Ranch = [{port, 8088}],
     Minirest = #{
+        ranch_options => Ranch,
         base_path => BasePath,
         modules => [example_hello_api],
         authorization => Authorization,

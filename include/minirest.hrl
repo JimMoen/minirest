@@ -17,6 +17,35 @@
 
 -define(API_SPEC, api_spec).
 
+%% server name
+-type minirest_server()  :: atom().
+-type minirest_options() :: #{
+                                protocol            => http | https | undefined,
+                                ranch_options       => ranch:opts(),
+                                %% minirest_api behaviour modules
+                                modules             => list(atom()),
+                                dispatch            => list() | undefined,
+                                %% Authorization fun(cowboy_req:req()) -> ok | minirest_response() | Error :: term()
+                                authorization       => {Module :: atom(), Function :: atom()} | undefined,
+                                security            => list() | undefined,
+                                base_path           => string() | undefined,
+                                swagger_global_spec => map() | undefined,
+                                swagger_support     => true | false | undefined
+                            }.
+
+%% HTTP status code
+-type response_code()    :: non_neg_integer().
+-type response_headers() :: map().
+-type response_body()    :: binary() | map() | list() | jsx:json_term().
+
+-type minirest_response() ::  response_code()
+                            | {response_code()}
+                            | {response_code(), response_body()}
+                            | {response_code(), response_headers(), response_body()}
+                            %% not 2XX response code
+                            %% response json {"code" : Code, "message": Message}
+                            | {response_code(), Code :: atom(), Message :: binary()}.
+
 -type path() :: string().
 -type mete_data() :: map().
 -type callback_function() :: atom().

@@ -21,9 +21,11 @@
 
 -include("minirest.hrl").
 
+-spec(start(minirest_server(), minirest_options()) -> {ok, pid()} | {error, any()}).
 start(Name, Options) ->
     start(Name, ranch_opts(Options), maps:without([ranch_options], Options)).
 
+-spec(start(minirest_server(), ranch:opts(), minirest_options()) -> {ok, pid()} | {error, any()}).
 start(Name, RanchOptions, Options) ->
     Protocol = maps:get(protocol, Options, http),
     SwaggerSupport = maps:get(swagger_support, Options, true),
@@ -35,9 +37,11 @@ start(Name, RanchOptions, Options) ->
     CowboyOptions = #{env => #{dispatch => Dispatch}},
     start_listener(Protocol, Name, RanchOptions, CowboyOptions).
 
+-spec(stop(minirest_server()) -> ok | {error, not_found}).
 stop(Name) ->
     cowboy:stop_listener(Name).
 
+-spec(ref(atom() | binary()) -> map()).
 ref(Name) when is_atom(Name) ->
     ref(atom_to_binary(Name, utf8));
 
