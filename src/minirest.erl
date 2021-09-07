@@ -51,9 +51,9 @@ ref(Name) ->
 %%%==============================================================================================
 %% internal
 
-ranch_opts(#{protocol := http, ranch_options := RanchOpts}) ->
+ranch_opts(#{ranch_options := RanchOpts}) ->
     RanchOpts;
-ranch_opts(#{protocol := https, ranch_options := RanchOpts}) ->
+ranch_opts(#{ranch_options := RanchOpts}) ->
     RanchOpts.
 
 merge_dispatch(Trails, #{dispatch := Dispatch0}) ->
