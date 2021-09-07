@@ -52,8 +52,6 @@ ref(Name) ->
 %% internal
 
 ranch_opts(#{ranch_options := RanchOpts}) ->
-    RanchOpts;
-ranch_opts(#{ranch_options := RanchOpts}) ->
     RanchOpts.
 
 merge_dispatch(Trails, #{dispatch := Dispatch0}) ->
