@@ -13,39 +13,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 %%--------------------------------------------------------------------
+-module(fake_ifdb).
+%% API
+-export([]).
 
--module(minirest_SUITE).
-
--compile(export_all).
--compile(nowarn_export_all).
-
--define(PORT, 8088).
-
--include_lib("eunit/include/eunit.hrl").
-
-init_per_suite(C) ->
-    application:ensure_all_started(minirest),
-    C.
-
-end_per_suite(C) -> C.
-
-all() ->
-    [
-        % t_find_app_api
-        t_simple_api
-    ].
-
-% t_find_app_api(_) ->
-%     application:ensure_all_started(test_server),
-%     Apps = [test_server],
-%     Modules = minirest_api:find_api_modules(Apps),
-%     ?assertEqual(Modules, [echo_api]).
-
-t_simple_api() ->
+start() ->
     Modules = [example_hello_api],
-    RanchOptions = [{port, ?PORT}],
+    RanchOptions = [{port, 8087}],
     MinirestOptions = #{modules => Modules},
-    {ok, _} = minirest:start(?MODULE, RanchOptions, MinirestOptions),
-    Response = minirest_test_util:request(get, "/hello").
-
+    {ok, _} = minirest:start(?MODULE, RanchOptions, MinirestOptions).
 
