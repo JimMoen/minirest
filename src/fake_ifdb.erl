@@ -15,10 +15,11 @@
 %%--------------------------------------------------------------------
 -module(fake_ifdb).
 %% API
--export([]).
+-export([start/0]).
 
 start() ->
-    Modules = [example_hello_api],
+    application:ensure_all_started(minirest),
+    Modules = [ifdb_api],
     RanchOptions = [{port, 8087}],
     MinirestOptions = #{modules => Modules},
     {ok, _} = minirest:start(?MODULE, RanchOptions, MinirestOptions).
