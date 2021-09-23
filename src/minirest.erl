@@ -17,7 +17,9 @@
 -include_lib("kernel/include/file.hrl").
 
 -export([ start_http/3
+        , start_http/4
         , start_https/3
+        , start_https/4
         , stop_http/1
         ]).
 
@@ -48,8 +50,13 @@
 
 -spec(start_http(atom(), list(), list()) -> {ok, pid()}).
 start_http(ServerName, Options, Handlers) ->
+    start_http(ServerName, Options, Handlers, #{}).
+
+-spec(start_http(atom(), list(), list(), map()) -> {ok, pid()}).
+start_http(ServerName, Options, Handlers, ProtocolOptions0) ->
     Dispatch = cowboy_router:compile([{'_', handlers(Handlers)}]),
-    case cowboy:start_clear(ServerName, Options, #{env => #{dispatch => Dispatch}}) of 
+    ProtocolOptions = maps:merge(#{env => #{dispatch => Dispatch}}, ProtocolOptions0),
+    case cowboy:start_clear(ServerName, Options, ProtocolOptions) of 
         {ok, _}  -> ok;
         {error, {already_started, _}} -> ok;
         {error, eaddrinuse} ->
@@ -63,8 +70,13 @@ start_http(ServerName, Options, Handlers) ->
 
 -spec(start_https(atom(), list(), list()) -> {ok, pid()}).
 start_https(ServerName, Options, Handlers) ->
+    start_https(ServerName, Options, Handlers, #{}).
+
+-spec(start_https(atom(), list(), list(), map()) -> {ok, pid()}).
+start_https(ServerName, Options, Handlers, ProtocolOptions0) ->
     Dispatch = cowboy_router:compile([{'_', handlers(Handlers)}]),
-    case cowboy:start_tls(ServerName, Options, #{env => #{dispatch => Dispatch}}) of 
+    ProtocolOptions = maps:merge(#{env => #{dispatch => Dispatch}}, ProtocolOptions0),
+    case cowboy:start_tls(ServerName, Options, ProtocolOptions) of 
         {ok, _}  -> ok;
         {error, eaddrinuse} ->
             ?LOG(error, "Start ~s listener on ~p unsuccessfully: the port is occupied", [ServerName, get_port(Options)]),
