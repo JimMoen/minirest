@@ -82,7 +82,6 @@ dispatch(Req, Route, Filter) ->
     end.
 
 dispatch(Req, #{module := Mod, func := Fun, bindings := Bindings}) ->
-    io:format("~p~n", [Req]),
     case catch parse_params(Req) of
         {'EXIT', Reason} ->
             error_logger:error_msg("Params error: ~p", [Reason]),
