@@ -182,6 +182,8 @@ to_binary(B) when is_binary(B) -> B;
 to_binary(L) when is_list(L) ->
     iolist_to_binary(L).
 
+json_decode(<<>>) ->
+    [];
 json_decode(B) ->
     from_ejson(jiffy:decode(B)).
 
